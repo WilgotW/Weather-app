@@ -84,12 +84,15 @@ class rainParticle{
 function checkWeather(weatherDescription){
     switch (weatherDescription) {
         case "Rain":
-                console.log("its raining");
-                canvas.classList.remove('sunnyTheme');
-                canvas.classList.add('rainTheme');
+                gradient("raining");
+                // canvas.classList.remove('sunnyTheme');
+                // canvas.classList.add('rainTheme');
                 instantiateRain();
             break;
         default:
+                gradient("sunny");
+                // canvas.classList.remove('rainTheme');
+                // canvas.classList.add('sunnyTheme');
             break;
     }
 }
@@ -99,8 +102,27 @@ function instantiateRain(){
         rainParticles.push(new rainParticle(RandomNum(0, canvas.width), 0));
     }
 }
+let grd;
+function gradient(weather){
+    console.log("sss");
+    grd = c.createLinearGradient(0, 0, canvas.width, 0);
+    if(weather == "sunny"){
+        grd.addColorStop(0, 'rgb(0,226,255)');
+        grd.addColorStop(1, 'rgb(0,161,255)');
+    }else if(weather == "raining"){
+        console.log("hhehh");
+        grd.addColorStop(0, 'rgb(128,176,182)');
+        grd.addColorStop(1, 'rgb(36,60,75)');
+    }
+}
+
+
 
 function update(){
+    gradient("raining");
+    c.fillStyle = grd;
+    c.fillRect(0, 0, canvas.width, canvas.height);
+
     rainParticles.forEach(particle => {
         particle.draw();
         particle.move();
@@ -111,16 +133,13 @@ update()
 
 let RandomNum = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+function gradient(weather){
+    var grd = c.createLinearGradient(0, 0, canvas.width, 0);
+    if(weather == "sunny"){
+        grd.addColorStop(0, 'rgb(0,226,255)');
+        grd.addColorStop(1, 'rgb(0,161,255)');
+    }else if(weather == "raining"){
+        grd.addColorStop(0, 'rgb(128,176,182)');
+        grd.addColorStop(1, 'rgb(36,60,75)');
+    }
+}
