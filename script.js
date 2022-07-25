@@ -22,6 +22,8 @@ function call(){
         var nameValue = data['name'];
         var temp = data['main']['temp'];
         var descValue = data['weather'][0]['description'];
+        console.log(data);
+        checkWeather(data['weather'][0]['main']);
 
         countryLocation.innerHTML = nameValue;
         weather.innerHTML = convertToCelcius(temp) + "\u00B0C";
@@ -46,3 +48,79 @@ window.addEventListener('keydown', function(event){
         call();
     }
 });
+
+//background animations:
+const canvas = document.querySelector('canvas');
+const c = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.addEventListener('resize', function(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+
+let rainParticles = [];
+
+class rainParticle{
+    constructor(x, y){
+        this.x = x;
+        this.y = y;
+        this.yVelocity = 1 + Math.random();
+        this.radius = 1;
+    }
+    draw(){
+        c.fillStyle = "rgb(3, 144, 252)";
+        c.beginPath();
+        c.arc(this.x, this.y, this.radius, 0, Math.PI *2);
+        c.fill();
+    }
+    move(){
+        this.y += this.yVelocity;
+    }
+}
+
+function checkWeather(weatherDescription){
+    switch (weatherDescription) {
+        case "Rain":
+                console.log("its raining");
+                canvas.classList.remove('sunnyTheme');
+                canvas.classList.add('rainTheme');
+                instantiateRain();
+            break;
+        default:
+            break;
+    }
+}
+
+function instantiateRain(){
+    for(i = 0; i < 20; i++){
+        rainParticles.push(new rainParticle(RandomNum(0, canvas.width), 0));
+    }
+}
+
+function update(){
+    rainParticles.forEach(particle => {
+        particle.draw();
+        particle.move();
+    });
+    requestAnimationFrame(update);
+}
+update()
+
+let RandomNum = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
+
+
+
+
+
+
+
+
+
+
+
+
+
+

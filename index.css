@@ -2,13 +2,24 @@ body{
   margin: 0;
   padding: 0;
 }
-#background{
+canvas{
   position: absolute;
   z-index: 0;
   width: 100%;
   height: 100vh;
+  transition-duration: 1s;
+  
+}
+.sunnyTheme{
+  transition-duration: 1s;
   background: rgb(0,255,236);
   background: linear-gradient(129deg, rgba(0,255,236,1) 0%, rgba(0,209,245,1) 52%, rgba(0,173,242,1) 100%);
+}
+
+.rainTheme{
+  transition-duration: 1s;
+  background: rgb(144,194,201);
+  background: linear-gradient(351deg, rgba(144,194,201,1) 0%, rgba(90,123,129,1) 50%, rgba(30,43,42,1) 100%);
 }
 
 #positioning{
@@ -29,6 +40,8 @@ body{
 
   display: inline-block;
 }
+
+
 
 #logo{
   margin-top: 20px;
