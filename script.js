@@ -1,3 +1,14 @@
+const canvas = document.querySelector('canvas');
+const c = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.addEventListener('resize', function(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+
 const button = document.getElementById("search-button");
 const inputSearch = document.getElementById("search-input");
 const countryLocation = document.getElementById("country-title");
@@ -50,96 +61,129 @@ window.addEventListener('keydown', function(event){
 });
 
 //background animations:
-const canvas = document.querySelector('canvas');
-const c = canvas.getContext('2d');
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-window.addEventListener('resize', function(){
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-});
-
 let rainParticles = [];
+let cloudParticles = [];
+let grd;
+let rainInterval;
+let cloudInterval;
 
 class rainParticle{
     constructor(x, y){
         this.x = x;
         this.y = y;
-        this.yVelocity = 1 + Math.random();
+        this.yVelocity = 2 + Math.random();
         this.radius = 1;
     }
     draw(){
         c.fillStyle = "rgb(3, 144, 252)";
-        c.beginPath();
-        c.arc(this.x, this.y, this.radius, 0, Math.PI *2);
-        c.fill();
+        c.fillRect(this.x, this.y, this.radius * 2, this.radius*5);
+        // c.beginPath();
+        // c.arc(this.x, this.y, this.radius, 0, Math.PI *2);
+        // c.fill();
     }
     move(){
         this.y += this.yVelocity;
+        
     }
 }
-
+class cloudParticle{
+    constructor(x, y){
+        this.x = x;
+        this.y = y;
+        this.xVelocity = 0.5 + Math.random();
+        this.size = 0.75 + Math.random()*2;
+    }
+    draw(){
+        //Cloud drawing:
+        c.fillStyle = "white";
+        c.beginPath();
+        c.arc(this.x + this.size, this.y+15 + this.size, 30 + this.size, 0, Math.PI * 2);
+        c.arc(this.x+30 + this.size, this.y + this.size, 20 + this.size, 0, Math.PI * 2);
+        c.fill();
+        c.beginPath();
+        c.arc(this.x+50 + this.size, this.y+22 + this.size, 20 + this.size, 0, Math.PI * 2);
+        c.fill();
+        c.fillRect(this.x+4 + this.size, this.y+14 + this.size, 53 + this.size, 25 + this.size);
+    }
+    move(){
+        this.x += this.xVelocity;
+    }
+}
+grd = c.createLinearGradient(0, 0, canvas.width, 0);
+grd.addColorStop(0, 'rgba(0,226,255)');
+grd.addColorStop(1, 'rgba(0,161,255)');
 function checkWeather(weatherDescription){
     switch (weatherDescription) {
         case "Rain":
+                if(cloudInterval != undefined){
+                    clearInterval(cloudInterval);
+                    removeParticles(cloudParticles);
+                }
+                rainInterval = setInterval(instantiateRain, 100);
                 gradient("raining");
-                // canvas.classList.remove('sunnyTheme');
-                // canvas.classList.add('rainTheme');
-                instantiateRain();
             break;
         default:
+                if(rainInterval != undefined){
+                    clearInterval(rainInterval);
+                    removeParticles(rainParticles);
+                }
+                cloudInterval = setInterval(instantiateClouds, 5000);
                 gradient("sunny");
-                // canvas.classList.remove('rainTheme');
-                // canvas.classList.add('sunnyTheme');
             break;
     }
 }
 
+
 function instantiateRain(){
-    for(i = 0; i < 20; i++){
+    for(i = 0; i < 10; i++){
         rainParticles.push(new rainParticle(RandomNum(0, canvas.width), 0));
     }
 }
-let grd;
+
+function instantiateClouds(){
+    for(let i = 0; i < 1; i++){
+        cloudParticles.push(new cloudParticle(-100, RandomNum(0, canvas.height)));
+    }
+}
+
+function update(){
+    c.fillStyle = grd
+    c.fillRect(0, 0, canvas.width, canvas.height);
+    
+    rainParticles.forEach(particle => {
+        particle.draw();
+        particle.move();
+        if(particle.y > canvas.height){
+            rainParticles.splice(particle, 1);
+        }
+    });
+    cloudParticles.forEach(particle => {
+        particle.draw();
+        particle.move();
+    });
+
+    requestAnimationFrame(update);
+}
+update()
+
+c.fillStyle = "white";
+c.fillRect(100, 100, 100, 100);
+
+
+function removeParticles(particleArray){
+    particleArray.splice(0,particleArray.length);
+}
+
 function gradient(weather){
-    console.log("sss");
     grd = c.createLinearGradient(0, 0, canvas.width, 0);
     if(weather == "sunny"){
         grd.addColorStop(0, 'rgb(0,226,255)');
         grd.addColorStop(1, 'rgb(0,161,255)');
     }else if(weather == "raining"){
-        console.log("hhehh");
         grd.addColorStop(0, 'rgb(128,176,182)');
         grd.addColorStop(1, 'rgb(36,60,75)');
-    }
+        
+    }    
 }
-
-
-
-function update(){
-    gradient("raining");
-    c.fillStyle = grd;
-    c.fillRect(0, 0, canvas.width, canvas.height);
-
-    rainParticles.forEach(particle => {
-        particle.draw();
-        particle.move();
-    });
-    requestAnimationFrame(update);
-}
-update()
 
 let RandomNum = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
-
-function gradient(weather){
-    var grd = c.createLinearGradient(0, 0, canvas.width, 0);
-    if(weather == "sunny"){
-        grd.addColorStop(0, 'rgb(0,226,255)');
-        grd.addColorStop(1, 'rgb(0,161,255)');
-    }else if(weather == "raining"){
-        grd.addColorStop(0, 'rgb(128,176,182)');
-        grd.addColorStop(1, 'rgb(36,60,75)');
-    }
-}
