@@ -77,9 +77,6 @@ class rainParticle{
     draw(){
         c.fillStyle = "rgb(3, 144, 252)";
         c.fillRect(this.x, this.y, this.radius * 2, this.radius*5);
-        // c.beginPath();
-        // c.arc(this.x, this.y, this.radius, 0, Math.PI *2);
-        // c.fill();
     }
     move(){
         this.y += this.yVelocity;
@@ -119,16 +116,20 @@ function checkWeather(weatherDescription){
                     clearInterval(cloudInterval);
                     removeParticles(cloudParticles);
                 }
-                rainInterval = setInterval(instantiateRain, 100);
-                gradient("raining");
+                if(rainInterval == undefined){
+                    rainInterval = setInterval(instantiateRain, 100);
+                    gradient("raining");
+                }
             break;
         default:
                 if(rainInterval != undefined){
                     clearInterval(rainInterval);
                     removeParticles(rainParticles);
                 }
-                cloudInterval = setInterval(instantiateClouds, 5000);
-                gradient("sunny");
+                if(cloudInterval == undefined){
+                    cloudInterval = setInterval(instantiateClouds, 5000);
+                    gradient("sunny");
+                }
             break;
     }
 }
