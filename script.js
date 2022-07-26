@@ -114,6 +114,7 @@ function checkWeather(weatherDescription){
         case "Rain":
                 if(cloudInterval != undefined){
                     clearInterval(cloudInterval);
+                    cloudInterval = undefined;
                     removeParticles(cloudParticles);
                 }
                 if(rainInterval == undefined){
@@ -122,12 +123,16 @@ function checkWeather(weatherDescription){
                 }
             break;
         default:
+                
                 if(rainInterval != undefined){
                     clearInterval(rainInterval);
+                    rainInterval = undefined;
                     removeParticles(rainParticles);
                 }
+                
                 if(cloudInterval == undefined){
                     cloudInterval = setInterval(instantiateClouds, 5000);
+                    console.log("hej");
                     gradient("sunny");
                 }
             break;
@@ -148,7 +153,7 @@ function instantiateClouds(){
 }
 
 function update(){
-    c.fillStyle = grd
+    c.fillStyle = grd;
     c.fillRect(0, 0, canvas.width, canvas.height);
     
     rainParticles.forEach(particle => {
@@ -167,24 +172,20 @@ function update(){
 }
 update()
 
-c.fillStyle = "white";
-c.fillRect(100, 100, 100, 100);
-
-
 function removeParticles(particleArray){
     particleArray.splice(0,particleArray.length);
 }
 
 function gradient(weather){
     grd = c.createLinearGradient(0, 0, canvas.width, 0);
-    if(weather == "sunny"){
+    if(weather === "sunny"){
+        console.log("suuuu");
         grd.addColorStop(0, 'rgb(0,226,255)');
         grd.addColorStop(1, 'rgb(0,161,255)');
-    }else if(weather == "raining"){
+    }else if(weather === "raining"){
+        console.log("hhheee");
         grd.addColorStop(0, 'rgb(128,176,182)');
         grd.addColorStop(1, 'rgb(36,60,75)');
-        
     }    
 }
-
 let RandomNum = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
