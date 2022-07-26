@@ -68,14 +68,22 @@ canvas{
   background: rgb(224, 224, 224);
 }
 #country-title{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 25%;
   text-align: center;
   font-family: 'Roboto', sans-serif;
   font-size: 20px;
 }
 #data{
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 25%;
-  text-align: center;
   font-family: 'Roboto', sans-serif;
   font-size: 15px;
 }
@@ -97,8 +105,23 @@ canvas{
   height: 17px;
 }
 #description{
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 25%;
   text-align: center;
   font-family: 'Roboto', sans-serif;
   font-size: 15px;
+}
+hr{
+  width: 200px;
+  position: absolute;
+  size: 3;
+  background-color: black;
+  box-shadow: none;
+}
+.center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
