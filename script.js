@@ -123,13 +123,13 @@ function checkWeather(weatherDescription){
                 }
             break;
         default:
-                
+                //spawn rain
                 if(rainInterval != undefined){
                     clearInterval(rainInterval);
                     rainInterval = undefined;
                     removeParticles(rainParticles);
                 }
-                
+                //spawn clouds
                 if(cloudInterval == undefined){
                     cloudInterval = setInterval(instantiateClouds, 5000);
                     console.log("hej");
